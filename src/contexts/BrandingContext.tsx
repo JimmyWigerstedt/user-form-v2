@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { generateRgbVariables } from '../utils/brandingUtils';
 
@@ -74,23 +73,24 @@ export const BrandingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const applyBrandingToCssVariables = (colors: BrandingColors) => {
     const root = document.documentElement;
     
-    // Apply all color values to CSS variables
-    root.style.setProperty('--color-primary', colors.primary);
-    root.style.setProperty('--color-primary-muted', colors.primaryMuted);
-    root.style.setProperty('--color-primary-foreground', colors.primaryForeground);
-    root.style.setProperty('--color-background', colors.background);
-    root.style.setProperty('--color-secondary-background', colors.secondaryBackground);
-    root.style.setProperty('--color-border', colors.borderColor);
-    root.style.setProperty('--color-text-primary', colors.textPrimary);
-    root.style.setProperty('--color-text-secondary', colors.textSecondary);
-    
-    // Generate and apply RGB variables for all colors
-    const rgbVariables = generateRgbVariables(colors);
-    Object.entries(rgbVariables).forEach(([key, value]) => {
-      root.style.setProperty(`--${key}`, value);
+    // Create a record of colors for RGB conversion
+    const colorRecord: Record<string, string> = {};
+    Object.entries(colors).forEach(([key, value]) => {
+      colorRecord[key] = value;
     });
     
-    // Update body styles directly for immediate effect
+    // Apply all color values to CSS variables
+    Object.entries(colors).forEach(([key, value]) => {
+      root.style.setProperty(`--color-${key}`, value);
+    });
+    
+    // Generate and apply RGB variables
+    const rgbVariables = generateRgbVariables(colorRecord);
+    Object.entries(rgbVariables).forEach(([key, value]) => {
+      root.style.setProperty(`--color-${key}`, value);
+    });
+    
+    // Update body styles
     document.body.style.backgroundColor = colors.background;
     document.body.style.color = colors.textPrimary;
     

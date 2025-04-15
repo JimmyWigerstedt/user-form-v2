@@ -1,4 +1,3 @@
-
 /**
  * Converts a hex color code to an RGB value for CSS variables
  */
@@ -29,10 +28,8 @@ export const hexToRgb = (hex: string): string | null => {
 export const generateRgbVariables = (colors: Record<string, string>): Record<string, string> => {
   const rgbVariables: Record<string, string> = {};
   
-  Object.keys(colors).forEach(key => {
-    const hex = colors[key];
+  Object.entries(colors).forEach(([key, hex]) => {
     const rgb = hexToRgb(hex);
-    
     if (rgb) {
       rgbVariables[`${key}-rgb`] = rgb;
     }

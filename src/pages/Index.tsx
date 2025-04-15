@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useUrlParams } from '../hooks/useUrlParams';
 import { fetchFormData } from '../services/api';
@@ -9,6 +8,23 @@ import { useBranding } from '../contexts/BrandingContext';
 import DebugPanel from '../components/DebugPanel';
 import { generateRgbVariables } from '../utils/brandingUtils';
 
+interface BrandingColors {
+  primary: string;
+  primaryMuted: string;
+  primaryForeground: string;
+  background: string;
+  secondaryBackground: string;
+  borderColor: string;
+  textPrimary: string;
+  textSecondary: string;
+}
+
+interface CompanyInfo {
+  name: string;
+  supportEmail: string;
+  logo: string;
+}
+
 interface FormData {
   name?: string;
   availableUsers?: number;
@@ -17,21 +33,8 @@ interface FormData {
   paymentemail?: string;
   submitted?: boolean;
   branding?: {
-    colors: {
-      primary: string;
-      primaryMuted: string;
-      primaryForeground: string;
-      background: string;
-      secondaryBackground: string;
-      borderColor: string;
-      textPrimary: string;
-      textSecondary: string;
-    };
-    company: {
-      name: string;
-      supportEmail: string;
-      logo: string;
-    };
+    colors: BrandingColors;
+    company: CompanyInfo;
   };
 }
 
@@ -72,7 +75,7 @@ const Index = () => {
           setError('Invalid form token or no data received.');
           setFormData(null);
         } else {
-          setFormData(data);
+          setFormData(data as FormData);
           
           // Apply branding if available in the response
           if (data.branding) {
