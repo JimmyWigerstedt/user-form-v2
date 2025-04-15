@@ -1,9 +1,15 @@
+
 /**
  * Converts a hex color code to an RGB value for CSS variables
  */
 export const hexToRgb = (hex: string): string | null => {
   // Remove the hash if it exists
   hex = hex.replace(/^#/, '');
+
+  // Handle shorthand hex (e.g., #FFF)
+  if (hex.length === 3) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
 
   // Parse the hex values
   const bigint = parseInt(hex, 16);
@@ -31,7 +37,9 @@ export const generateRgbVariables = (colors: Record<string, string>): Record<str
   Object.entries(colors).forEach(([key, hex]) => {
     const rgb = hexToRgb(hex);
     if (rgb) {
-      rgbVariables[`${key}-rgb`] = rgb;
+      // Convert camelCase to kebab-case for CSS variables
+      const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+      rgbVariables[`color-${cssKey}-rgb`] = rgb;
     }
   });
   
@@ -54,6 +62,11 @@ export const createTransparentColor = (color: string, opacity: number): string =
 export const shouldUseDarkText = (backgroundColor: string): boolean => {
   // Remove the hash if it exists
   const hex = backgroundColor.replace(/^#/, '');
+  
+  // Handle shorthand hex (e.g., #FFF)
+  if (hex.length === 3) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
   
   // Parse the hex values
   const r = parseInt(hex.substr(0, 2), 16);

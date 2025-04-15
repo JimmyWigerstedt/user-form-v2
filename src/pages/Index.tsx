@@ -6,7 +6,6 @@ import ApiKeyForm from '../components/ApiKeyForm';
 import UserInvitationForm from '../components/UserInvitationForm';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useBranding } from '../contexts/BrandingContext';
-import DebugPanel from '../components/DebugPanel';
 import { generateRgbVariables } from '../utils/brandingUtils';
 
 interface BrandingColors {
@@ -39,7 +38,7 @@ interface FormData {
   };
 }
 
-// Extend the PageLoadResponse type to include branding
+// This type matches what comes from the API
 interface PageLoadResponse extends FormData {
   branding?: {
     colors: BrandingColors;
@@ -53,7 +52,6 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isApiKeyFormCompleted, setIsApiKeyFormCompleted] = useState(false);
-  const [showDebug, setShowDebug] = useState(true);
   const userFormRef = useRef<HTMLDivElement>(null);
   const { updateBranding, branding, isLoaded: isBrandingLoaded } = useBranding();
   
@@ -77,7 +75,7 @@ const Index = () => {
           return () => clearTimeout(tokenCheckTimeout);
         }
         
-        const data = await fetchFormData(formToken);
+        const data = await fetchFormData(formToken) as PageLoadResponse;
         console.log('Data received in component:', data);
         
         if (Object.keys(data).length === 0) {
@@ -131,18 +129,6 @@ const Index = () => {
     }, 500);
   };
   
-  useEffect(() => {
-    // Add keyboard handler for debug panel toggle
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.altKey && e.key === 'd') {
-        setShowDebug(prev => !prev);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-  
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 neutral-loading">
@@ -161,10 +147,7 @@ const Index = () => {
           }
         </div>
         <LoadingSpinner size="lg" />
-        <p className="mt-6 text-xl animate-pulse" style={{ color: 'var(--color-text-secondary, #eee)' }}>Preparing user...</p>
-        
-        {/* Debug panel */}
-        <DebugPanel formData={formData} isVisible={showDebug} />
+        <p className="mt-6 text-xl animate-pulse">Preparing user...</p>
       </div>
     );
   }
@@ -187,12 +170,9 @@ const Index = () => {
           }
         </div>
         <div className="glass-card p-8 max-w-md text-center">
-          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text-primary)' }}>Error</h2>
-          <p style={{ color: 'var(--color-text-secondary)' }}>{error}</p>
+          <h2 className="text-2xl font-semibold mb-4">Error</h2>
+          <p>{error}</p>
         </div>
-        
-        {/* Debug panel */}
-        <DebugPanel formData={formData} isVisible={showDebug} />
       </div>
     );
   }
@@ -216,16 +196,13 @@ const Index = () => {
           }
         </div>
         <LoadingSpinner size="lg" />
-        <p className="mt-6 text-xl animate-pulse" style={{ color: 'var(--color-text-secondary, #eee)' }}>Preparing user...</p>
-        
-        {/* Debug panel */}
-        <DebugPanel formData={formData} isVisible={showDebug} />
+        <p className="mt-6 text-xl animate-pulse">Preparing user...</p>
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen p-4 sm:p-6 md:p-8" style={{ backgroundColor: 'var(--color-background)' }}>
+    <div className="min-h-screen p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="mb-8 h-32 flex items-center justify-center">
@@ -239,11 +216,11 @@ const Index = () => {
               }}
             />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight">
             Welcome to the API Integration Form
           </h1>
           {formData?.name && (
-            <p className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+            <p className="text-lg">
               Hello, <span style={{ color: 'var(--color-primary)', fontWeight: 500 }}>{formData.name}</span>
             </p>
           )}
@@ -272,14 +249,11 @@ const Index = () => {
             )}
           </div>
           
-          <div className="text-center text-xs py-8" style={{ color: 'var(--color-text-secondary)' }}>
+          <div className="text-center text-xs py-8">
             &copy; {new Date().getFullYear()} | All rights reserved
           </div>
         </div>
       </div>
-      
-      {/* Debug panel */}
-      <DebugPanel formData={formData} isVisible={showDebug} />
     </div>
   );
 };

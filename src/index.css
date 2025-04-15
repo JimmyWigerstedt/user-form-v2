@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -132,9 +133,22 @@ h1, h2, h3, h4, h5, h6 {
   @apply font-semibold;
 }
 
+p, span, div {
+  color: var(--color-text-primary);
+}
+
 label, .text-secondary {
   color: var(--color-text-secondary);
   @apply font-medium;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .fade-enter {
@@ -187,32 +201,4 @@ label, .text-secondary {
 .neutral-loading {
   background-color: #333;
   color: #eee;
-}
-
-/* Debug styles */
-.debug-panel {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  max-width: 500px;
-  max-height: 400px;
-  overflow: auto;
-  z-index: 9999;
-}
-
-.debug-panel h3 {
-  margin-top: 8px;
-  margin-bottom: 4px;
-  font-weight: bold;
-}
-
-.debug-panel pre {
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-all;
 }

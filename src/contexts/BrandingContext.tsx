@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { generateRgbVariables } from '../utils/brandingUtils';
 
@@ -81,16 +82,20 @@ export const BrandingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     
     // Apply all color values to CSS variables
     Object.entries(colors).forEach(([key, value]) => {
-      root.style.setProperty(`--color-${key}`, value);
+      // Convert camelCase to kebab-case for CSS variables
+      const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+      root.style.setProperty(`--color-${cssKey}`, value);
     });
     
     // Generate and apply RGB variables
     const rgbVariables = generateRgbVariables(colorRecord);
     Object.entries(rgbVariables).forEach(([key, value]) => {
-      root.style.setProperty(`--color-${key}`, value);
+      // Convert camelCase to kebab-case for CSS variables
+      const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+      root.style.setProperty(`--${cssKey}`, value);
     });
     
-    // Update body styles
+    // Update body styles directly for better compatibility
     document.body.style.backgroundColor = colors.background;
     document.body.style.color = colors.textPrimary;
     
