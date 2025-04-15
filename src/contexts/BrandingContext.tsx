@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { generateRgbVariables } from '../utils/brandingUtils';
 
 // Default branding values as fallback
 const defaultBranding = {
@@ -82,6 +83,12 @@ export const BrandingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     root.style.setProperty('--color-border', colors.borderColor);
     root.style.setProperty('--color-text-primary', colors.textPrimary);
     root.style.setProperty('--color-text-secondary', colors.textSecondary);
+    
+    // Generate and apply RGB variables for all colors
+    const rgbVariables = generateRgbVariables(colors);
+    Object.entries(rgbVariables).forEach(([key, value]) => {
+      root.style.setProperty(`--${key}`, value);
+    });
     
     // Update body styles directly for immediate effect
     document.body.style.backgroundColor = colors.background;

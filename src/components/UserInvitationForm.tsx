@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { submitUserInvitations } from '../services/api';
 import LoadingSpinner from './LoadingSpinner';
 import { UserPlus, X, Mail } from 'lucide-react';
+import { useBranding } from '../contexts/BrandingContext';
 
 interface UserInvitationFormProps {
   formToken: string;
@@ -28,6 +29,7 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
   const [successMessage, setSuccessMessage] = useState('');
   const [localAvailableUsers, setLocalAvailableUsers] = useState(availableUsers);
   const [localActiveUsers, setLocalActiveUsers] = useState(activeUsers);
+  const { branding } = useBranding();
 
   useEffect(() => {
     // Initialize form with empty fields based on available users
@@ -104,10 +106,10 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
     return (
       <div className="glass-card p-8 animate-fade-in">
         <div className="text-center py-6">
-          <UserPlus size={48} className="mx-auto mb-4 text-zinc-400" />
-          <h2 className="text-2xl font-semibold mb-2 text-white">No User Slots Available</h2>
-          <p className="text-zinc-300">
-            Need more user slots? Please contact Revenue Aigency at <a href="mailto:ruben@revenueaigency.com" className="text-brand hover:underline">ruben@revenueaigency.com</a>
+          <UserPlus size={48} className="mx-auto mb-4" style={{ color: 'var(--color-text-secondary)' }} />
+          <h2 className="text-2xl font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>No User Slots Available</h2>
+          <p style={{ color: 'var(--color-text-secondary)' }}>
+            Need more user slots? Please contact Revenue Aigency at <a href="mailto:ruben@revenueaigency.com" style={{ color: 'var(--color-primary)' }} className="hover:underline">ruben@revenueaigency.com</a>
           </p>
         </div>
       </div>
@@ -116,34 +118,40 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
 
   return (
     <div className="glass-card p-8 animate-fade-in">
-      <h2 className="text-2xl font-semibold mb-2 text-center text-white">Invite Users</h2>
+      <h2 className="text-2xl font-semibold mb-2 text-center" style={{ color: 'var(--color-text-primary)' }}>Invite Users</h2>
       
       <div className="flex justify-center items-center mb-6 space-x-6">
         <div className="text-center">
-          <div className="text-3xl font-bold text-brand">{localActiveUsers}</div>
-          <div className="text-sm text-zinc-400">Active Users</div>
+          <div className="text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>{localActiveUsers}</div>
+          <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>Active Users</div>
         </div>
-        <div className="h-10 border-r border-zinc-600"></div>
+        <div className="h-10 border-r" style={{ borderColor: 'var(--color-border)' }}></div>
         <div className="text-center">
-          <div className="text-3xl font-bold text-brand">{localAvailableUsers}</div>
-          <div className="text-sm text-zinc-400">Available Slots</div>
+          <div className="text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>{localAvailableUsers}</div>
+          <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>Available Slots</div>
         </div>
       </div>
       
       {existingUsers.length > 0 && (
         <div className="mb-6">
-          <h3 className="text-sm uppercase text-zinc-400 mb-3 font-medium">Existing Users</h3>
+          <h3 className="text-sm uppercase mb-3 font-medium" style={{ color: 'var(--color-text-secondary)' }}>Existing Users</h3>
           <div className="space-y-2">
             {existingUsers.map((user, index) => (
               <div 
                 key={`existing-${index}`} 
-                className="bg-[#333333] px-4 py-3 rounded-md flex justify-between items-center"
+                className="px-4 py-3 rounded-md flex justify-between items-center"
+                style={{ backgroundColor: 'var(--color-secondary-background)' }}
               >
                 <div className="flex-1">
-                  <div className="font-medium text-white">{user.name}</div>
-                  <div className="text-sm text-zinc-400">{user.email}</div>
+                  <div className="font-medium" style={{ color: 'var(--color-text-primary)' }}>{user.name}</div>
+                  <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{user.email}</div>
                 </div>
-                <div className="bg-brand/20 text-brand text-xs font-medium px-2 py-1 rounded">
+                <div className="text-xs font-medium px-2 py-1 rounded"
+                  style={{ 
+                    backgroundColor: `rgba(var(--color-primary-rgb), 0.2)`,
+                    color: 'var(--color-primary)'
+                  }}
+                >
                   Invited
                 </div>
               </div>
@@ -154,7 +162,7 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
       
       {localAvailableUsers > 0 && (
         <>
-          <div className="text-zinc-300 mb-6 text-center">
+          <div className="mb-6 text-center" style={{ color: 'var(--color-text-secondary)' }}>
             Please enter the names and email addresses of the users you'd like to invite.
           </div>
           
@@ -162,11 +170,16 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
             {users.slice(0, localAvailableUsers).map((user, index) => (
               <div 
                 key={index} 
-                className="space-y-3 p-4 border border-zinc-700 rounded-lg bg-[#333333]/50 animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className="space-y-3 p-4 rounded-lg animate-fade-in"
+                style={{ 
+                  animationDelay: `${index * 100}ms`,
+                  backgroundColor: 'rgba(var(--color-secondary-background-rgb), 0.5)',
+                  borderColor: 'var(--color-border)',
+                  borderWidth: '1px'
+                }}
               >
                 <div className="flex justify-between items-center">
-                  <h3 className="text-sm font-medium text-zinc-300">User {index + 1}</h3>
+                  <h3 className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>User {index + 1}</h3>
                   {index > 0 && (
                     <button
                       type="button"
@@ -175,7 +188,8 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
                         updatedUsers.splice(index, 1);
                         setUsers(updatedUsers);
                       }}
-                      className="text-zinc-500 hover:text-zinc-300"
+                      className="hover:text-zinc-300"
+                      style={{ color: 'var(--color-text-secondary)' }}
                     >
                       <X size={16} />
                     </button>
@@ -183,7 +197,7 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
                 </div>
                 
                 <div>
-                  <label htmlFor={`name-${index}`} className="block text-xs font-medium text-zinc-400 mb-1">
+                  <label htmlFor={`name-${index}`} className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
                     Name
                   </label>
                   <input
@@ -198,7 +212,7 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
                 </div>
                 
                 <div>
-                  <label htmlFor={`email-${index}`} className="block text-xs font-medium text-zinc-400 mb-1">
+                  <label htmlFor={`email-${index}`} className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
                     Email
                   </label>
                   <input
@@ -218,7 +232,11 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
               <button
                 type="button"
                 onClick={() => setUsers([...users, { name: '', email: '' }])}
-                className="w-full py-3 border border-dashed border-zinc-600 rounded-lg text-zinc-400 hover:text-zinc-300 hover:border-zinc-500 transition-all duration-300"
+                className="w-full py-3 border border-dashed rounded-lg transition-all duration-300"
+                style={{ 
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-secondary)'
+                }}
               >
                 + Add Another User
               </button>
@@ -242,7 +260,14 @@ const UserInvitationForm: React.FC<UserInvitationFormProps> = ({
             </div>
             
             {successMessage && (
-              <div className="mt-4 p-4 bg-green-900/30 border border-green-800 rounded-md text-center text-green-300">
+              <div className="mt-4 p-4 rounded-md text-center"
+                style={{ 
+                  backgroundColor: 'rgba(0, 128, 0, 0.2)',
+                  borderColor: 'rgba(0, 128, 0, 0.3)',
+                  borderWidth: '1px',
+                  color: '#4ade80'
+                }}
+              >
                 {successMessage}
               </div>
             )}

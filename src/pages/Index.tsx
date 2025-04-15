@@ -119,6 +119,18 @@ const Index = () => {
     }, 500);
   };
   
+  useEffect(() => {
+    // Add keyboard handler for debug panel toggle
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && e.key === 'd') {
+        setShowDebug(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+  
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 neutral-loading">
@@ -137,7 +149,7 @@ const Index = () => {
           }
         </div>
         <LoadingSpinner size="lg" />
-        <p className="text-zinc-300 mt-6 text-xl animate-pulse">Preparing user...</p>
+        <p className="mt-6 text-xl animate-pulse" style={{ color: 'var(--color-text-secondary, #eee)' }}>Preparing user...</p>
         
         {/* Debug panel */}
         <DebugPanel formData={formData} isVisible={showDebug} />
@@ -163,8 +175,8 @@ const Index = () => {
           }
         </div>
         <div className="glass-card p-8 max-w-md text-center">
-          <h2 className="text-2xl font-semibold mb-4 text-white">Error</h2>
-          <p className="text-zinc-300">{error}</p>
+          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text-primary)' }}>Error</h2>
+          <p style={{ color: 'var(--color-text-secondary)' }}>{error}</p>
         </div>
         
         {/* Debug panel */}
@@ -192,7 +204,7 @@ const Index = () => {
           }
         </div>
         <LoadingSpinner size="lg" />
-        <p className="text-zinc-300 mt-6 text-xl animate-pulse">Preparing user...</p>
+        <p className="mt-6 text-xl animate-pulse" style={{ color: 'var(--color-text-secondary, #eee)' }}>Preparing user...</p>
         
         {/* Debug panel */}
         <DebugPanel formData={formData} isVisible={showDebug} />
@@ -201,7 +213,7 @@ const Index = () => {
   }
   
   return (
-    <div className="min-h-screen p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen p-4 sm:p-6 md:p-8" style={{ backgroundColor: 'var(--color-background)' }}>
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="mb-8 h-32 flex items-center justify-center">
@@ -215,12 +227,12 @@ const Index = () => {
               }}
             />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight" style={{ color: branding.colors.textPrimary }}>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
             Welcome to the API Integration Form
           </h1>
           {formData?.name && (
-            <p className="text-lg" style={{ color: branding.colors.textSecondary }}>
-              Hello, <span style={{ color: branding.colors.primary, fontWeight: 500 }}>{formData.name}</span>
+            <p className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+              Hello, <span style={{ color: 'var(--color-primary)', fontWeight: 500 }}>{formData.name}</span>
             </p>
           )}
         </div>
@@ -248,21 +260,14 @@ const Index = () => {
             )}
           </div>
           
-          <div className="text-center text-xs py-8" style={{ color: branding.colors.textSecondary }}>
+          <div className="text-center text-xs py-8" style={{ color: 'var(--color-text-secondary)' }}>
             &copy; {new Date().getFullYear()} | All rights reserved
           </div>
         </div>
       </div>
       
-      {/* Debug panel - toggle with key press (Alt+D) */}
+      {/* Debug panel */}
       <DebugPanel formData={formData} isVisible={showDebug} />
-      
-      {/* Keyboard handler for debug tools */}
-      <div className="hidden" onKeyDown={(e) => {
-        if (e.altKey && e.key === 'd') {
-          setShowDebug(prev => !prev);
-        }
-      }} tabIndex={0}></div>
     </div>
   );
 };
