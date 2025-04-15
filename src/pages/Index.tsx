@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useUrlParams } from '../hooks/useUrlParams';
 import { fetchFormData } from '../services/api';
@@ -32,6 +33,14 @@ interface FormData {
   emails?: string;
   paymentemail?: string;
   submitted?: boolean;
+  branding?: {
+    colors: BrandingColors;
+    company: CompanyInfo;
+  };
+}
+
+// Extend the PageLoadResponse type to include branding
+interface PageLoadResponse extends FormData {
   branding?: {
     colors: BrandingColors;
     company: CompanyInfo;
