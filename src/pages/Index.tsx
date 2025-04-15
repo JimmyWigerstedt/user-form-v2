@@ -5,7 +5,9 @@ import { fetchFormData } from '../services/api';
 import ApiKeyForm from '../components/ApiKeyForm';
 import UserInvitationForm from '../components/UserInvitationForm';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { clientConfig } from '../config/clientConfig';
+import { useBranding } from '../contexts/BrandingContext';
+import DebugPanel from '../components/DebugPanel';
+import { generateRgbVariables } from '../utils/brandingUtils';
 
 interface FormData {
   name?: string;
@@ -14,6 +16,23 @@ interface FormData {
   emails?: string;
   paymentemail?: string;
   submitted?: boolean;
+  branding?: {
+    colors: {
+      primary: string;
+      primaryMuted: string;
+      primaryForeground: string;
+      background: string;
+      secondaryBackground: string;
+      borderColor: string;
+      textPrimary: string;
+      textSecondary: string;
+    };
+    company: {
+      name: string;
+      supportEmail: string;
+      logo: string;
+    };
+  };
 }
 
 const Index = () => {
@@ -22,7 +41,9 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isApiKeyFormCompleted, setIsApiKeyFormCompleted] = useState(false);
+  const [showDebug, setShowDebug] = useState(true);
   const userFormRef = useRef<HTMLDivElement>(null);
+  const { updateBranding, branding, isLoaded: isBrandingLoaded } = useBranding();
   
   useEffect(() => {
     const loadFormData = async () => {
@@ -53,6 +74,23 @@ const Index = () => {
         } else {
           setFormData(data);
           
+          // Apply branding if available in the response
+          if (data.branding) {
+            console.log('Applying branding from API response:', data.branding);
+            
+            // Apply RGB variables for colors
+            const colors = data.branding.colors;
+            const rgbVariables = generateRgbVariables(colors);
+            Object.entries(rgbVariables).forEach(([name, value]) => {
+              document.documentElement.style.setProperty(`--${name}`, value);
+            });
+            
+            // Update branding in context
+            updateBranding(data.branding);
+          } else {
+            console.log('No branding data in API response, using defaults');
+          }
+          
           // If form is already submitted, mark API key form as completed
           if (data.submitted) {
             setIsApiKeyFormCompleted(true);
@@ -70,7 +108,7 @@ const Index = () => {
     };
     
     loadFormData();
-  }, [formToken]);
+  }, [formToken, updateBranding]);
   
   const handleApiKeyFormSuccess = () => {
     setIsApiKeyFormCompleted(true);
@@ -83,10 +121,26 @@ const Index = () => {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <img src={clientConfig.company.logo} alt="Logo" className="h-32 mb-8" />
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 neutral-loading">
+        <div className="mb-8 h-32 flex items-center justify-center">
+          {isBrandingLoaded ? 
+            <img 
+              src={branding.company.logo} 
+              alt={`${branding.company.name} Logo`} 
+              className="h-full" 
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+                (e.target as HTMLImageElement).src = '/placeholder.svg';
+              }}
+            /> : 
+            <div className="h-full w-32 bg-gray-300 animate-pulse rounded-md"></div>
+          }
+        </div>
         <LoadingSpinner size="lg" />
         <p className="text-zinc-300 mt-6 text-xl animate-pulse">Preparing user...</p>
+        
+        {/* Debug panel */}
+        <DebugPanel formData={formData} isVisible={showDebug} />
       </div>
     );
   }
@@ -94,11 +148,27 @@ const Index = () => {
   if (error) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <img src={clientConfig.company.logo} alt="Logo" className="h-32 mb-8" />
+        <div className="mb-8 h-32 flex items-center justify-center">
+          {isBrandingLoaded ? 
+            <img 
+              src={branding.company.logo} 
+              alt={`${branding.company.name} Logo`} 
+              className="h-full" 
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+                (e.target as HTMLImageElement).src = '/placeholder.svg';
+              }}
+            /> : 
+            <div className="h-full w-32 bg-gray-300 animate-pulse rounded-md"></div>
+          }
+        </div>
         <div className="glass-card p-8 max-w-md text-center">
           <h2 className="text-2xl font-semibold mb-4 text-white">Error</h2>
           <p className="text-zinc-300">{error}</p>
         </div>
+        
+        {/* Debug panel */}
+        <DebugPanel formData={formData} isVisible={showDebug} />
       </div>
     );
   }
@@ -107,9 +177,25 @@ const Index = () => {
   if (!formData) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <img src={clientConfig.company.logo} alt="Logo" className="h-32 mb-8" />
+        <div className="mb-8 h-32 flex items-center justify-center">
+          {isBrandingLoaded ? 
+            <img 
+              src={branding.company.logo} 
+              alt={`${branding.company.name} Logo`} 
+              className="h-full" 
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+                (e.target as HTMLImageElement).src = '/placeholder.svg';
+              }}
+            /> : 
+            <div className="h-full w-32 bg-gray-300 animate-pulse rounded-md"></div>
+          }
+        </div>
         <LoadingSpinner size="lg" />
         <p className="text-zinc-300 mt-6 text-xl animate-pulse">Preparing user...</p>
+        
+        {/* Debug panel */}
+        <DebugPanel formData={formData} isVisible={showDebug} />
       </div>
     );
   }
@@ -118,11 +204,23 @@ const Index = () => {
     <div className="min-h-screen p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <img src={clientConfig.company.logo} alt="Logo" className="h-32 mx-auto mb-8" />
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2 tracking-tight">Welcome to the API Integration Form</h1>
+          <div className="mb-8 h-32 flex items-center justify-center">
+            <img 
+              src={branding.company.logo} 
+              alt={`${branding.company.name} Logo`} 
+              className="h-full max-h-32 mx-auto" 
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+                (e.target as HTMLImageElement).src = '/placeholder.svg';
+              }}
+            />
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight" style={{ color: branding.colors.textPrimary }}>
+            Welcome to the API Integration Form
+          </h1>
           {formData?.name && (
-            <p className="text-lg text-zinc-300">
-              Hello, <span className="text-brand font-medium">{formData.name}</span>
+            <p className="text-lg" style={{ color: branding.colors.textSecondary }}>
+              Hello, <span style={{ color: branding.colors.primary, fontWeight: 500 }}>{formData.name}</span>
             </p>
           )}
         </div>
@@ -150,11 +248,21 @@ const Index = () => {
             )}
           </div>
           
-          <div className="text-center text-xs text-zinc-500 py-8">
+          <div className="text-center text-xs py-8" style={{ color: branding.colors.textSecondary }}>
             &copy; {new Date().getFullYear()} | All rights reserved
           </div>
         </div>
       </div>
+      
+      {/* Debug panel - toggle with key press (Alt+D) */}
+      <DebugPanel formData={formData} isVisible={showDebug} />
+      
+      {/* Keyboard handler for debug tools */}
+      <div className="hidden" onKeyDown={(e) => {
+        if (e.altKey && e.key === 'd') {
+          setShowDebug(prev => !prev);
+        }
+      }} tabIndex={0}></div>
     </div>
   );
 };

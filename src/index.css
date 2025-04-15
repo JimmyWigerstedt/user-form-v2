@@ -36,6 +36,16 @@
     --ring: 43 85% 53%;
 
     --radius: 0.8rem;
+    
+    /* Dynamic Branding Variables - will be set via JavaScript */
+    --color-primary: #EFB61D;
+    --color-primary-muted: #f0c75a;
+    --color-primary-foreground: #FFFFFF;
+    --color-background: #393939;
+    --color-secondary-background: #444444;
+    --color-border: #555555;
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #CCCCCC;
   }
   
   * {
@@ -44,14 +54,16 @@
   }
 
   body {
-    @apply bg-brand-background text-zinc-100 font-poppins;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: 'Poppins', sans-serif;
   }
 
   input:-webkit-autofill,
   input:-webkit-autofill:hover, 
   input:-webkit-autofill:focus {
-    -webkit-text-fill-color: #fff;
-    -webkit-box-shadow: 0 0 0px 1000px #444444 inset;
+    -webkit-text-fill-color: var(--color-text-primary);
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-secondary-background) inset;
     transition: background-color 5000s ease-in-out 0s;
   }
 }
@@ -61,19 +73,41 @@
 }
 
 .input-field {
-  @apply bg-[#444444] border-0 focus:ring-2 focus:ring-brand text-white py-3 px-4 rounded-md transition-all duration-300 shadow-sm;
+  background-color: var(--color-secondary-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  @apply focus:ring-2 py-3 px-4 rounded-md transition-all duration-300 shadow-sm;
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-muted);
 }
 
 .checkbox-field {
-  @apply h-6 w-6 text-brand rounded-md focus:ring-2 focus:ring-brand transition-all duration-300;
+  @apply h-6 w-6 rounded-md transition-all duration-300;
+  accent-color: var(--color-primary);
 }
 
 .btn-primary {
-  @apply bg-brand hover:bg-brand-muted text-white py-3 px-6 rounded-md font-medium shadow-md transition-all duration-300 transform hover:-translate-y-1;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  @apply py-3 px-6 rounded-md font-medium shadow-md transition-all duration-300 transform hover:-translate-y-1;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-muted);
 }
 
 .btn-secondary {
-  @apply bg-[#444444] hover:bg-[#555555] text-white py-3 px-6 rounded-md font-medium shadow-md transition-all duration-300 transform hover:-translate-y-1;
+  background-color: var(--color-secondary-background);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  @apply py-3 px-6 rounded-md font-medium shadow-md transition-all duration-300 transform hover:-translate-y-1;
+}
+
+.btn-secondary:hover {
+  filter: brightness(1.1);
 }
 
 .shimmer {
@@ -83,7 +117,10 @@
 }
 
 .glass-card {
-  @apply bg-[#44444499] backdrop-blur-md border border-zinc-600 rounded-lg shadow-xl;
+  background-color: rgba(var(--color-secondary-background-rgb, 68, 68, 68), 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  @apply rounded-lg shadow-xl;
 }
 
 .fade-enter {
@@ -121,4 +158,47 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* For neutral loading state before branding is applied */
+.neutral-loading {
+  background-color: #333;
+  color: #eee;
+}
+
+/* Debug styles */
+.debug-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  max-width: 500px;
+  max-height: 400px;
+  overflow: auto;
+  z-index: 9999;
+}
+
+.debug-panel h3 {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.debug-panel pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
