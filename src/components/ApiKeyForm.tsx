@@ -132,16 +132,16 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
 
   return (
     <div className="glass-card p-8 animate-fade-in">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-white">API Keys Submission</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-center" style={{ color: 'var(--color-text-primary)' }}>API Keys Submission</h2>
       
-      <div className="text-zinc-300 mb-6 text-center">
+      <div className="mb-6 text-center" style={{ color: 'var(--color-text-primary)' }}>
         Please enter your details and API keys below. Your API keys will be verified before proceeding.
       </div>
       
       <form onSubmit={handleVerify} className="space-y-6">
         <div className="space-y-4">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-zinc-300 mb-1">
+            <label htmlFor="firstName" className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
               Your Name
             </label>
             <input
@@ -157,7 +157,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
           </div>
           
           <div>
-            <label htmlFor="companyName" className="block text-sm font-medium text-zinc-300 mb-1">
+            <label htmlFor="companyName" className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
               Company Name
             </label>
             <input
@@ -173,7 +173,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
           </div>
           
           <div>
-            <label htmlFor="slackEmail" className="block text-sm font-medium text-zinc-300 mb-1">
+            <label htmlFor="slackEmail" className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
               Email to invite into Slack
             </label>
             <div className="mb-2">
@@ -186,7 +186,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
                   className="checkbox-field"
                   disabled={!paymentEmail}
                 />
-                <span className="ml-2 text-sm text-zinc-300">
+                <span className="ml-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                   {paymentEmail ? `"${paymentEmail}" is fine` : "No payment email available"}
                 </span>
               </label>
@@ -206,7 +206,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
           </div>
           
           <div>
-            <label htmlFor="openRouterApiKey" className="block text-sm font-medium text-zinc-300 mb-1">
+            <label htmlFor="openRouterApiKey" className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
               OpenRouter API Key
               {verificationStatus.openRouter !== 'idle' && (
                 <span className="ml-2">
@@ -250,7 +250,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
           </div>
           
           <div>
-            <label htmlFor="fluxApiKey" className="block text-sm font-medium text-zinc-300 mb-1">
+            <label htmlFor="fluxApiKey" className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
               Black Forest Labs API Key
               {verificationStatus.flux !== 'idle' && (
                 <span className="ml-2">
@@ -317,7 +317,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
         </div>
         
         {(verificationStatus.openRouter === 'fail' || verificationStatus.flux === 'fail') && (
-          <div className="mt-4 p-4 bg-red-900/30 border border-red-800 rounded-md text-sm text-zinc-200">
+          <div className="mt-4 p-4 bg-red-900/30 border border-red-800 rounded-md text-sm" style={{ color: 'var(--color-text-primary)' }}>
             <p className="font-medium">Please correct the following issues:</p>
             <ul className="list-disc list-inside mt-2">
               {verificationStatus.openRouter === 'fail' && (

@@ -5,24 +5,12 @@ import { fetchFormData } from '../services/api';
 import ApiKeyForm from '../components/ApiKeyForm';
 import UserInvitationForm from '../components/UserInvitationForm';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { useBranding } from '../contexts/BrandingContext';
+import { useBranding, BrandingColors, CompanyInfo } from '../contexts/BrandingContext';
 import { generateRgbVariables } from '../utils/brandingUtils';
 
-interface BrandingColors {
-  primary: string;
-  primaryMuted: string;
-  primaryForeground: string;
-  background: string;
-  secondaryBackground: string;
-  borderColor: string;
-  textPrimary: string;
-  textSecondary: string;
-}
-
-interface CompanyInfo {
-  name: string;
-  supportEmail: string;
-  logo: string;
+interface BrandingData {
+  colors: BrandingColors;
+  company: CompanyInfo;
 }
 
 interface FormData {
@@ -32,18 +20,12 @@ interface FormData {
   emails?: string;
   paymentemail?: string;
   submitted?: boolean;
-  branding?: {
-    colors: BrandingColors;
-    company: CompanyInfo;
-  };
+  branding?: BrandingData;
 }
 
 // This type matches what comes from the API
 interface PageLoadResponse extends FormData {
-  branding?: {
-    colors: BrandingColors;
-    company: CompanyInfo;
-  };
+  branding?: BrandingData;
 }
 
 const Index = () => {
@@ -90,7 +72,13 @@ const Index = () => {
             
             // Apply RGB variables for colors
             const colors = data.branding.colors;
-            const rgbVariables = generateRgbVariables(colors);
+            // Convert BrandingColors to Record<string, string> for the generateRgbVariables function
+            const colorRecord: Record<string, string> = {};
+            Object.entries(colors).forEach(([key, value]) => {
+              colorRecord[key] = value;
+            });
+            
+            const rgbVariables = generateRgbVariables(colorRecord);
             Object.entries(rgbVariables).forEach(([name, value]) => {
               document.documentElement.style.setProperty(`--${name}`, value);
             });

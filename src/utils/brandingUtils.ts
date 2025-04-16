@@ -8,7 +8,10 @@ export const hexToRgb = (hex: string): string | null => {
 
   // Handle shorthand hex (e.g., #FFF)
   if (hex.length === 3) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    const r = hex[0];
+    const g = hex[1];
+    const b = hex[2];
+    hex = r + r + g + g + b + b;
   }
 
   // Parse the hex values
@@ -64,14 +67,18 @@ export const shouldUseDarkText = (backgroundColor: string): boolean => {
   const hex = backgroundColor.replace(/^#/, '');
   
   // Handle shorthand hex (e.g., #FFF)
+  let processedHex = hex;
   if (hex.length === 3) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    const r = hex[0];
+    const g = hex[1];
+    const b = hex[2];
+    processedHex = r + r + g + g + b + b;
   }
   
   // Parse the hex values
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
+  const r = parseInt(processedHex.substr(0, 2), 16);
+  const g = parseInt(processedHex.substr(2, 2), 16);
+  const b = parseInt(processedHex.substr(4, 2), 16);
   
   // Calculate the perceived brightness
   // Formula: (R * 299 + G * 587 + B * 114) / 1000

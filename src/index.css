@@ -46,6 +46,16 @@
     --color-border: #555555;
     --color-text-primary: #FFFFFF;
     --color-text-secondary: #CCCCCC;
+    
+    /* RGB versions - will be set via JavaScript */
+    --color-primary-rgb: 239, 182, 29;
+    --color-primary-muted-rgb: 240, 199, 90;
+    --color-primary-foreground-rgb: 255, 255, 255;
+    --color-background-rgb: 57, 57, 57;
+    --color-secondary-background-rgb: 68, 68, 68;
+    --color-border-rgb: 85, 85, 85;
+    --color-text-primary-rgb: 255, 255, 255;
+    --color-text-secondary-rgb: 204, 204, 204;
   }
   
   * {
@@ -120,12 +130,13 @@
   background: linear-gradient(
     135deg,
     rgba(var(--color-primary-rgb), 0.03) 0%,
-    rgba(var(--color-secondary-background-rgb), 0.05) 100%
+    rgba(var(--color-background-rgb), 0.05) 100%
   );
   backdrop-filter: blur(12px);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(var(--color-border-rgb), 0.7);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   @apply rounded-lg;
+  color: var(--color-text-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {

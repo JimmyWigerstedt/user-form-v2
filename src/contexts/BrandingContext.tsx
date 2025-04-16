@@ -80,7 +80,7 @@ export const BrandingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       colorRecord[key] = value;
     });
     
-    // Apply all color values to CSS variables
+    // Apply all color values directly to CSS variables
     Object.entries(colors).forEach(([key, value]) => {
       // Convert camelCase to kebab-case for CSS variables
       const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
@@ -90,9 +90,7 @@ export const BrandingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     // Generate and apply RGB variables
     const rgbVariables = generateRgbVariables(colorRecord);
     Object.entries(rgbVariables).forEach(([key, value]) => {
-      // Convert camelCase to kebab-case for CSS variables
-      const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-      root.style.setProperty(`--${cssKey}`, value);
+      root.style.setProperty(`--${key}`, value);
     });
     
     // Update body styles directly for better compatibility
