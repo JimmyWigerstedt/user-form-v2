@@ -78,6 +78,23 @@
   }
 }
 
+/* Neutral loading and error screens - not affected by branding */
+.neutral-loading-screen {
+  background-color: #FFFFFF;
+}
+
+.neutral-error-screen {
+  background-color: #FFFFFF;
+}
+
+.neutral-error-card {
+  background-color: #FFFFFF;
+  border: 1px solid #F1F1F1;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Rest of CSS classes */
 .form-container {
   @apply max-w-xl w-full mx-auto;
 }
@@ -213,3 +230,4 @@ a:hover {
   background-color: #333;
   color: #eee;
 }
+
