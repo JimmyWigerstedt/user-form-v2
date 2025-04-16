@@ -108,52 +108,21 @@ const Index = () => {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 neutral-loading">
-        <div className="mb-8 h-32 flex items-center justify-center">
-          {isBrandingLoaded ? 
-            <img 
-              src={branding.company.logo} 
-              alt={`${branding.company.name} Logo`} 
-              className="h-full" 
-              onError={(e) => {
-                console.error('Logo failed to load:', e);
-                (e.target as HTMLImageElement).src = '/placeholder.svg';
-              }}
-            /> : 
-            <div className="h-full w-32 bg-gray-300 animate-pulse rounded-md"></div>
-          }
-        </div>
-        <LoadingSpinner size="lg" />
-        <p className="mt-6 text-xl animate-pulse">Preparing user...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 neutral-loading-screen">
+        <LoadingSpinner size="lg" color="border-neutral-400" />
+        <p className="mt-6 text-xl text-neutral-700">Preparing user...</p>
       </div>
     );
   }
   
   if (error) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <div className="mb-8 h-32 flex items-center justify-center">
-          {isBrandingLoaded ? 
-            <img 
-              src={branding.company.logo} 
-              alt={`${branding.company.name} Logo`} 
-              className="h-full" 
-              onError={(e) => {
-                console.error('Logo failed to load:', e);
-                (e.target as HTMLImageElement).src = '/placeholder.svg';
-              }}
-            /> : 
-            <div className="h-full w-32 bg-gray-300 animate-pulse rounded-md"></div>
-          }
-        </div>
-        <div className="glass-card p-8 max-w-md text-center">
-          <h2 
-            className="text-2xl font-semibold mb-4"
-            style={{ color: 'var(--color-text-primary)' }}
-          >
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 neutral-error-screen">
+        <div className="neutral-error-card p-8 max-w-md text-center">
+          <h2 className="text-2xl font-semibold mb-4 text-neutral-800">
             Error
           </h2>
-          <p style={{ color: 'var(--color-text-primary)' }}>{error}</p>
+          <p className="text-neutral-700">{error}</p>
         </div>
       </div>
     );
@@ -161,23 +130,9 @@ const Index = () => {
   
   if (!formData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <div className="mb-8 h-32 flex items-center justify-center">
-          {isBrandingLoaded ? 
-            <img 
-              src={branding.company.logo} 
-              alt={`${branding.company.name} Logo`} 
-              className="h-full" 
-              onError={(e) => {
-                console.error('Logo failed to load:', e);
-                (e.target as HTMLImageElement).src = '/placeholder.svg';
-              }}
-            /> : 
-            <div className="h-full w-32 bg-gray-300 animate-pulse rounded-md"></div>
-          }
-        </div>
-        <LoadingSpinner size="lg" />
-        <p className="mt-6 text-xl animate-pulse">Preparing user...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 neutral-loading-screen">
+        <LoadingSpinner size="lg" color="border-neutral-400" />
+        <p className="mt-6 text-xl text-neutral-700">Preparing user...</p>
       </div>
     );
   }
