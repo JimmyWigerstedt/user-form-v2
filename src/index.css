@@ -46,6 +46,16 @@
     --color-border: #555555;
     --color-text-primary: #FFFFFF;
     --color-text-secondary: #CCCCCC;
+    
+    /* RGB versions - will be set via JavaScript */
+    --color-primary-rgb: 239, 182, 29;
+    --color-primary-muted-rgb: 240, 199, 90;
+    --color-primary-foreground-rgb: 255, 255, 255;
+    --color-background-rgb: 57, 57, 57;
+    --color-secondary-background-rgb: 68, 68, 68;
+    --color-border-rgb: 85, 85, 85;
+    --color-text-primary-rgb: 255, 255, 255;
+    --color-text-secondary-rgb: 204, 204, 204;
   }
   
   * {
@@ -81,7 +91,7 @@
 
 .input-field:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary-muted);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
 }
 
 .checkbox-field {
@@ -117,10 +127,39 @@
 }
 
 .glass-card {
-  background-color: rgba(var(--color-secondary-background-rgb, 68, 68, 68), 0.85);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-primary-rgb), 0.03) 0%,
+    rgba(var(--color-background-rgb), 0.05) 100%
+  );
   backdrop-filter: blur(12px);
-  border: 1px solid var(--color-border);
-  @apply rounded-lg shadow-xl;
+  border: 1px solid rgba(var(--color-border-rgb), 0.7);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  @apply rounded-lg;
+  color: var(--color-text-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-primary);
+  @apply font-semibold;
+}
+
+p, span, div {
+  color: var(--color-text-primary);
+}
+
+label, .text-secondary {
+  color: var(--color-text-secondary);
+  @apply font-medium;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .fade-enter {
@@ -173,32 +212,4 @@
 .neutral-loading {
   background-color: #333;
   color: #eee;
-}
-
-/* Debug styles */
-.debug-panel {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  max-width: 500px;
-  max-height: 400px;
-  overflow: auto;
-  z-index: 9999;
-}
-
-.debug-panel h3 {
-  margin-top: 8px;
-  margin-bottom: 4px;
-  font-weight: bold;
-}
-
-.debug-panel pre {
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-all;
 }

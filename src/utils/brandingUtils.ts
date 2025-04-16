@@ -6,6 +6,14 @@ export const hexToRgb = (hex: string): string | null => {
   // Remove the hash if it exists
   hex = hex.replace(/^#/, '');
 
+  // Handle shorthand hex (e.g., #FFF)
+  if (hex.length === 3) {
+    const r = hex[0];
+    const g = hex[1];
+    const b = hex[2];
+    hex = r + r + g + g + b + b;
+  }
+
   // Parse the hex values
   const bigint = parseInt(hex, 16);
   
@@ -29,12 +37,12 @@ export const hexToRgb = (hex: string): string | null => {
 export const generateRgbVariables = (colors: Record<string, string>): Record<string, string> => {
   const rgbVariables: Record<string, string> = {};
   
-  Object.keys(colors).forEach(key => {
-    const hex = colors[key];
+  Object.entries(colors).forEach(([key, hex]) => {
     const rgb = hexToRgb(hex);
-    
     if (rgb) {
-      rgbVariables[`${key}-rgb`] = rgb;
+      // Convert camelCase to kebab-case for CSS variables
+      const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+      rgbVariables[`color-${cssKey}-rgb`] = rgb;
     }
   });
   
@@ -58,10 +66,19 @@ export const shouldUseDarkText = (backgroundColor: string): boolean => {
   // Remove the hash if it exists
   const hex = backgroundColor.replace(/^#/, '');
   
+  // Handle shorthand hex (e.g., #FFF)
+  let processedHex = hex;
+  if (hex.length === 3) {
+    const r = hex[0];
+    const g = hex[1];
+    const b = hex[2];
+    processedHex = r + r + g + g + b + b;
+  }
+  
   // Parse the hex values
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
+  const r = parseInt(processedHex.substr(0, 2), 16);
+  const g = parseInt(processedHex.substr(2, 2), 16);
+  const b = parseInt(processedHex.substr(4, 2), 16);
   
   // Calculate the perceived brightness
   // Formula: (R * 299 + G * 587 + B * 114) / 1000

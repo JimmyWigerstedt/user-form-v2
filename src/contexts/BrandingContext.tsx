@@ -74,23 +74,26 @@ export const BrandingProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const applyBrandingToCssVariables = (colors: BrandingColors) => {
     const root = document.documentElement;
     
-    // Apply all color values to CSS variables
-    root.style.setProperty('--color-primary', colors.primary);
-    root.style.setProperty('--color-primary-muted', colors.primaryMuted);
-    root.style.setProperty('--color-primary-foreground', colors.primaryForeground);
-    root.style.setProperty('--color-background', colors.background);
-    root.style.setProperty('--color-secondary-background', colors.secondaryBackground);
-    root.style.setProperty('--color-border', colors.borderColor);
-    root.style.setProperty('--color-text-primary', colors.textPrimary);
-    root.style.setProperty('--color-text-secondary', colors.textSecondary);
+    // Create a record of colors for RGB conversion
+    const colorRecord: Record<string, string> = {};
+    Object.entries(colors).forEach(([key, value]) => {
+      colorRecord[key] = value;
+    });
     
-    // Generate and apply RGB variables for all colors
-    const rgbVariables = generateRgbVariables(colors);
+    // Apply all color values directly to CSS variables
+    Object.entries(colors).forEach(([key, value]) => {
+      // Convert camelCase to kebab-case for CSS variables
+      const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+      root.style.setProperty(`--color-${cssKey}`, value);
+    });
+    
+    // Generate and apply RGB variables
+    const rgbVariables = generateRgbVariables(colorRecord);
     Object.entries(rgbVariables).forEach(([key, value]) => {
       root.style.setProperty(`--${key}`, value);
     });
     
-    // Update body styles directly for immediate effect
+    // Update body styles directly for better compatibility
     document.body.style.backgroundColor = colors.background;
     document.body.style.color = colors.textPrimary;
     
