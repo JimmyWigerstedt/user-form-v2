@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useUrlParams } from '../hooks/useUrlParams';
 import { fetchFormData } from '../services/api';
@@ -23,7 +22,6 @@ interface FormData {
   branding?: BrandingData;
 }
 
-// This type matches what comes from the API
 interface PageLoadResponse extends FormData {
   branding?: BrandingData;
 }
@@ -42,8 +40,6 @@ const Index = () => {
       try {
         console.log('Calling fetchFormData with token:', formToken);
         
-        // Only show the no token error if there's actually no token after a short delay
-        // This gives time for the URL params to be properly extracted
         if (!formToken) {
           const tokenCheckTimeout = setTimeout(() => {
             const currentParams = new URLSearchParams(window.location.search);
@@ -66,13 +62,10 @@ const Index = () => {
         } else {
           setFormData(data as FormData);
           
-          // Apply branding if available in the response
           if (data.branding) {
             console.log('Applying branding from API response:', data.branding);
             
-            // Apply RGB variables for colors
             const colors = data.branding.colors;
-            // Convert BrandingColors to Record<string, string> for the generateRgbVariables function
             const colorRecord: Record<string, string> = {};
             Object.entries(colors).forEach(([key, value]) => {
               colorRecord[key] = value;
@@ -83,18 +76,15 @@ const Index = () => {
               document.documentElement.style.setProperty(`--${name}`, value);
             });
             
-            // Update branding in context
             updateBranding(data.branding);
           } else {
             console.log('No branding data in API response, using defaults');
           }
           
-          // If form is already submitted, mark API key form as completed
           if (data.submitted) {
             setIsApiKeyFormCompleted(true);
           }
           
-          // Clear any previous errors since we got data successfully
           setError(null);
         }
       } catch (error) {
@@ -111,7 +101,6 @@ const Index = () => {
   const handleApiKeyFormSuccess = () => {
     setIsApiKeyFormCompleted(true);
     
-    // Scroll to user form
     setTimeout(() => {
       userFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 500);
@@ -158,14 +147,18 @@ const Index = () => {
           }
         </div>
         <div className="glass-card p-8 max-w-md text-center">
-          <h2 className="text-2xl font-semibold mb-4">Error</h2>
-          <p>{error}</p>
+          <h2 
+            className="text-2xl font-semibold mb-4"
+            style={{ color: 'var(--color-text-primary)' }}
+          >
+            Error
+          </h2>
+          <p style={{ color: 'var(--color-text-primary)' }}>{error}</p>
         </div>
       </div>
     );
   }
   
-  // Only render the forms if we have valid form data
   if (!formData) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -204,7 +197,10 @@ const Index = () => {
               }}
             />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight">
+          <h1 
+            className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight"
+            style={{ color: 'var(--color-text-primary)' }}
+          >
             Welcome to the API Integration Form
           </h1>
           {formData?.name && (
@@ -237,7 +233,7 @@ const Index = () => {
             )}
           </div>
           
-          <div className="text-center text-xs py-8">
+          <div className="text-center text-xs py-8" style={{ color: 'var(--color-text-secondary)' }}>
             &copy; {new Date().getFullYear()} | All rights reserved
           </div>
         </div>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { verifyApiKeys, submitApiKeyForm } from '../services/api';
 import LoadingSpinner from './LoadingSpinner';
@@ -30,7 +29,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
     firstName: name,
     companyName: '',
     slackEmail: paymentEmail || '',
-    usePaymentEmail: Boolean(paymentEmail), // Set to true if paymentEmail exists
+    usePaymentEmail: Boolean(paymentEmail),
     openRouterApiKey: '',
     fluxApiKey: ''
   });
@@ -54,7 +53,6 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
       setFormData(prev => ({ 
         ...prev, 
         [name]: checked,
-        // If usePaymentEmail is checked, update slackEmail with paymentEmail
         ...(name === 'usePaymentEmail' && checked ? { slackEmail: paymentEmail } : {})
       }));
     } else {
@@ -75,12 +73,10 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
         flux: result.fluxPass
       });
 
-      // Both keys passed verification
       if (result.openRouterPass === 'pass' && result.fluxPass === 'pass') {
         await handleSubmit(true);
         onSubmitSuccess();
       } else {
-        // Submit with failed keys
         await handleSubmit(false);
       }
     } catch (error) {
@@ -93,15 +89,12 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
   const handleSubmit = async (keysPassed: boolean) => {
     setIsSubmitting(true);
     
-    // Smart payload logic for email
     let slackEmailToUse = formData.slackEmail;
     
-    // If usePaymentEmail is true, use paymentEmail
     if (formData.usePaymentEmail && paymentEmail) {
       slackEmailToUse = paymentEmail;
     }
     
-    // If still empty and we have a payment email, use that
     if (!slackEmailToUse && paymentEmail) {
       slackEmailToUse = paymentEmail;
     }
@@ -120,7 +113,6 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
         }
       });
       
-      // Don't trigger success callback if keys didn't pass
       if (!keysPassed) {
         setIsSubmitting(false);
       }
@@ -132,9 +124,17 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
 
   return (
     <div className="glass-card p-8 animate-fade-in">
-      <h2 className="text-2xl font-semibold mb-6 text-center" style={{ color: 'var(--color-text-primary)' }}>API Keys Submission</h2>
+      <h2 
+        className="text-2xl font-semibold mb-6 text-center" 
+        style={{ color: 'var(--color-text-primary)' }}
+      >
+        API Keys Submission
+      </h2>
       
-      <div className="mb-6 text-center" style={{ color: 'var(--color-text-primary)' }}>
+      <div 
+        className="mb-6 text-center" 
+        style={{ color: 'var(--color-text-secondary)' }}
+      >
         Please enter your details and API keys below. Your API keys will be verified before proceeding.
       </div>
       
@@ -317,7 +317,10 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({
         </div>
         
         {(verificationStatus.openRouter === 'fail' || verificationStatus.flux === 'fail') && (
-          <div className="mt-4 p-4 bg-red-900/30 border border-red-800 rounded-md text-sm" style={{ color: 'var(--color-text-primary)' }}>
+          <div 
+            className="mt-4 p-4 bg-red-900/30 border border-red-800 rounded-md text-sm" 
+            style={{ color: 'var(--color-text-primary)' }}
+          >
             <p className="font-medium">Please correct the following issues:</p>
             <ul className="list-disc list-inside mt-2">
               {verificationStatus.openRouter === 'fail' && (
